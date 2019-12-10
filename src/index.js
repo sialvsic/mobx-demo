@@ -1,57 +1,62 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { observable, computed } from 'mobx';
-import { observer } from 'mobx-react';
+import React from "react";
+import ReactDOM from "react-dom";
+import { observer } from "mobx-react";
+import observableTodoStore from "./store";
 
+@observer
+class TodoList extends React.Component {
+  render() {
+    const store = this.props.store;
+    console.log(store.todos.length);
+    return (
+      <div>
+        {store.report}
+        <ul>
+          {store.todos.map((todo, idx) => (
+            <TodoView todo={todo} key={idx} />
+          ))}
+        </ul>
+        {store.pendingRequests > 0 ? <marquee>Loading...</marquee> : null}
+        <button onClick={this.onNewTodo}>New Todo</button>
+        <small> (double-click a todo to edit)</small>
+      </div>
+    );
+  }
 
-class Todo {
-    id = Math.random();
-    @observable title;
-    @observable finished = false;
-    constructor(title) {
-        this.title = title;
-    }
-}
-
-class TodoList {
-    @observable todos = [];
-    @computed get unfinishedTodoCount() {
-        return this.todos.filter(todo => !todo.finished).length;
-    }
+  onNewTodo = () => {
+    this.props.store.addTodo(prompt("Enter a new todo:", "coffee plz"));
+  };
 }
 
 @observer
-class TodoListView extends React.Component {
-    render() {
-        return <div>
-            <ul>
-                {this.props.todoList.todos.map(todo =>
-                    <TodoView todo={todo} key={todo.id} />
-                )}
-            </ul>
-            Tasks left: {this.props.todoList.unfinishedTodoCount}
-        </div>
-    }
+class TodoView extends React.Component {
+  render() {
+    const todo = this.props.todo;
+    return (
+      <li onDoubleClick={this.onRename}>
+        <input
+          type="checkbox"
+          checked={todo.completed}
+          onChange={this.onToggleCompleted}
+        />
+        {todo.task}
+        {todo.assignee ? <small>{todo.assignee.name}</small> : null}
+      </li>
+    );
+  }
+
+  onToggleCompleted = () => {
+    const todo = this.props.todo;
+    todo.completed = !todo.completed;
+  };
+
+  onRename = () => {
+    const todo = this.props.todo;
+    todo.task = prompt("Task name", todo.task) || todo.task;
+  };
 }
 
-const TodoView = observer(({ todo }) =>
-    <li>
-        <input
-            type="checkbox"
-            checked={todo.finished}
-            onClick={() => todo.finished = !todo.finished}
-        />{todo.title}
-    </li>
+ReactDOM.render(
+  <TodoList store={observableTodoStore} />,
+  document.getElementById("root")
 );
-
-const store = new TodoList();
-
-ReactDOM.render(<TodoListView todoList={store} />, document.getElementById('root'));
-
-store.todos.push(
-    new Todo("Get Coffee"),
-    new Todo("Write simpler code")
-);
-store.todos[0].finished = true;
-
-
