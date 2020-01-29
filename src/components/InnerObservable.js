@@ -4,17 +4,15 @@ import { observer } from "mobx-react";
 
 //关注点未分离
 @observer
-class CounterWithInnerOB extends Component {
+class InnerObservable extends Component {
   @observable count = 0;
 
   handleInc = () => {
     this.count++;
-    console.log("+1");
   };
 
   handleDec = () => {
     this.count--;
-    console.log("-1");
   };
 
   render() {
@@ -28,4 +26,4 @@ class CounterWithInnerOB extends Component {
   }
 }
 
-export default CounterWithInnerOB;
+export default InnerObservable;
