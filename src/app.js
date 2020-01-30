@@ -4,6 +4,7 @@ import OuterObservable from "./components/OuterObservable";
 import ComputedValue from "./components/ComputedValue";
 import Action from "./components/Action";
 import ObservableArray from "./components/ObservableArray";
+import Asynchronous from "./components/Asynchronous";
 
 export default function app() {
   return (
@@ -19,6 +20,8 @@ export default function app() {
       <Action />
       <p>observable Array</p>
       <ObservableArray />
+      <p>Asynchronous</p>
+      <Asynchronous />
     </div>
   );
 }
