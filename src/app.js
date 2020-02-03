@@ -5,6 +5,7 @@ import ComputedValue from "./components/ComputedValue";
 import Action from "./components/Action";
 import ObservableArray from "./components/ObservableArray";
 import Asynchronous from "./components/Asynchronous";
+import Reactions from "./components/Reactions";
 
 export default function app() {
   return (
@@ -22,6 +23,8 @@ export default function app() {
       <ObservableArray />
       <p>Asynchronous</p>
       <Asynchronous />
+      <p>Reactions</p>
+      <Reactions />
     </div>
   );
 }
